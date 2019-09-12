@@ -1,0 +1,177 @@
+scriptId = 'com.thalmic.examples.myfirstscript'  
+scriptTitle = "My First Script"  
+scriptDetailsUrl = ""
+
+locked = true  
+appTitle = ""
+
+function onForegroundWindowChange(app, title)  
+    myo.setLockingPolicy("none")
+    yaw_ref = 0
+    roll_ref = 0
+    pitch_ref = 0
+    return true
+end
+
+function activeAppName()  
+    return appTitle
+end
+
+function onPeriodic()
+    myo.getPitch()
+    myo.getYaw()
+    myo.getRoll()
+
+    yaw_f = myo.getYaw() - yaw_ref
+    pitch_f = myo.getPitch() - pitch_ref
+    roll_f = myo.getRoll() - roll_ref
+
+end
+
+function onPoseEdge(pose, edge)  
+    --zzmyo.debug("onPoseEdge: " .. pose .. ": " .. edge)
+    currentPose = pose;
+        
+        if (pose == "fist" and edge == "on") then
+        
+            yaw_ref = myo.getYaw();
+            roll_ref = myo.getRoll();
+            pitch_ref = myo.getPitch();
+            --yaw_f = 0, roll_f = 0, pitch_f = 0;
+        end
+    if (yaw_f > 0.5 and yaw_f < 2.0) then
+            if (currentPose == "fingersSpread") then
+                -- << "O" << endl;
+                myo.keyboard("o", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "M" << endl;
+                myo.keyboard("m", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "N" << endl;
+                myo.keyboard("n", "down")
+            
+        end
+    elseif (yaw_f < -0.8) then
+            if (currentPose == "fingersSpread") then
+                -- << "G" << endl;
+                myo.keyboard("g", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "I" << endl;
+                myo.keyboard("i", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "H" << endl;
+                myo.keyboard("h", "down")
+            
+        end
+    elseif (pitch_f > 0.8) then
+            if (currentPose == "fingersSpread") then
+                -- << "C" << endl;
+                myo.keyboard("c", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "A" << endl;
+                myo.keyboard("a", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "B" << endl;
+                myo.keyboard("b", "down")
+            elseif (currentPose == "doubleTap") then
+                myo.keyboard(" ", "down")
+        end
+    elseif (pitch_f < -0.8) then
+            if (currentPose == "fingersSpread") then
+                -- << "V" << endl;
+                myo.keyboard("v", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "T" << endl;
+                myo.keyboard("t", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "U" << endl;
+                myo.keyboard("u", "down")
+            elseif (currentPose == "doubleTap") then
+                myo.keyboard("return", "down")
+        end
+     elseif (roll_f > 2) then
+            if (currentPose == "fingersSpread") then
+                -- << "F" << endl;
+                myo.keyboard("f", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "D" << endl;
+                myo.keyboard("d", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "E" << endl;
+                myo.keyboard("e", "down")
+            
+        end
+    elseif (roll_f < -0.35) then
+            if (currentPose == "fingersSpread") then
+                -- << "P" << endl;
+                myo.keyboard("p", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "Q" << endl;
+                myo.keyboard("q", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "R" << endl;
+                myo.keyboard("r", "down")
+            
+            elseif (currentPose == "doubleTap")then
+                -- << "S" << endl;
+                myo.keyboard("s", "down")
+            
+        end
+        --diagonals
+    elseif (yaw_f < 0.5 and yaw_f > 0) then
+            if (currentPose == "fingersSpread") then
+                -- << "W" << endl;
+                myo.keyboard("w", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "X" << endl;
+                myo.keyboard("x", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "Y" << endl;
+                myo.keyboard("y", "down")
+            
+        end
+    elseif (yaw_f < 0 and yaw_f > -0.8)  then
+            if (currentPose == "fingersSpread") then
+                -- << "Z" << endl;
+                myo.keyboard("z", "down")
+            
+            elseif (currentPose == "waveIn") then
+                -- << "J" << endl;
+                myo.keyboard("j", "down")
+            
+            elseif (currentPose == "waveOut") then
+                -- << "K" << endl;
+                myo.keyboard("k", "down")
+            
+            elseif (currentPose == "doubleTap" and roll_f > -0.35) then
+                -- << "L" << endl;
+                myo.keyboard("l", "down")
+            
+        end
+    end
+end
+
+function conditionallySwapWave(pose)  
+    if myo.getArm() == "left" then
+        if pose == "waveIn" then
+            pose = "waveOut"
+        elseif pose == "waveOut" then
+            pose = "waveIn"
+        end
+    end
+    return pose
+end  
